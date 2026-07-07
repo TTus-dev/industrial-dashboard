@@ -1,0 +1,10 @@
+:root {
+  --primary-color: #2c3e50;
+}
+
+.nav-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  align-items: center;
+  display: flex;
+}
