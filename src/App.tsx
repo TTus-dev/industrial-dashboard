@@ -1,20 +1,17 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { MainLayout } from './view/MainLayout';
-import {navigationItems} from "./routes/sidebarNavigation.ts";
+import { RouterProvider } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles'
+import {CssBaseline} from "@mui/material";
+import {theme} from "./app/theme";
+import {router} from "./app/router";
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <MainLayout />,
-        children: navigationItems.map(item => ({
-            path: item.path,
-            element: <item.component />
-        }))
-    }
-]);
 
 function App() {
-    return <RouterProvider router={router} />;
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <RouterProvider router={router} />
+        </ThemeProvider>
+    )
 }
 
 export default App;

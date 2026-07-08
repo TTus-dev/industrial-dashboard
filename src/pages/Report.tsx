@@ -1,6 +1,4 @@
-﻿
-
-const MachineList = () => {
+﻿const Report = () => {
     return (
         <div style={{ display: 'flex' }}>
             test
@@ -8,4 +6,4 @@ const MachineList = () => {
     );
 };
 
-export default MachineList;
+export default Report;
