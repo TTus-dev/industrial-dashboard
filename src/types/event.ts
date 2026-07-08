@@ -10,6 +10,6 @@ export interface DowntimeEvent {
     machineId: number;
     startTime: Date;
     endTime?: Date;
-    reason: DowntimeReason;
+    reason?: DowntimeReason;
     comment?: string;
 }

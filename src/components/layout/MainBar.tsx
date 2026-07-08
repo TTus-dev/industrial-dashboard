@@ -1,7 +1,7 @@
-﻿import {AppBar, Box, IconButton, Link, Toolbar, Typography} from "@mui/material";
-import {Link as RouterLink} from "react-router-dom";
-import {DarkMode, PrecisionManufacturing} from "@mui/icons-material";
-import {navigationItems} from "../app/navigation";
+﻿import { AppBar, Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { DarkMode, PrecisionManufacturing } from "@mui/icons-material";
+import { navigationItems } from "../../app/navigation";
 
 export const MainBar = () => (
     <AppBar position="static" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>

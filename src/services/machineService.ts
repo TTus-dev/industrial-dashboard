@@ -6,7 +6,10 @@ export const getMachine = (): Machine => {
         name: "Assembly Machine 01",
         status: "running",
         temperature: 72,
-        productionCount: 850,
-        targetCount: 850,
+        okCount: 850,
+        nokCount: 150,
+        targetCount: 10000,
+        startedAt: new Date(Date.now() - 1000 * 60 * 45),
+        idealCycleTime: Math.floor(Math.random() * (3000 - 1500) + 1500)
     }
 }
