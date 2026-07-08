@@ -1,75 +1,80 @@
-# React + TypeScript + Vite
+# Industrial dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript dashboard application inspired by industrial machine monitoring systems.
 
-Currently, two official plugins are available:
+This project recreates a simplified version of an industrial HMI/monitoring application,
+focusing on modern React architecture, TypeScript usage, Material UI components and data visualization.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The goal of this project is to apply existing frontend experience in React applications as well as find out how well 
+previous commercial experience in Vue translates to different ecosystem.
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React
+- TypeScript
+- Vite
+- Material UI
+- React Router
+- Chart.js / D3.js
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Planned Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Machine Dashboard
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Real-time machine status simulation
+- OEE monitoring
+- Production metrics
+- Temperature monitoring
+- Alarm and downtime simulation
 
+### Report
+
+- Machine workflow history
+- Date range filtering
+- Data visualization
+- Machine performance analysis
+
+
+## Data Source
+
+Currently, the application uses simulated frontend data instead of a backend service.
+
+The data layer is designed to imitate communication with external system, similar to how industrial applications consume
+REST APIs or real-time data sources.
+
+
+## Project structure
+
+The application follows a component-based React architecture:
+
+src/
+- app → Application configuration (router, theme, navigation)
+- components -> Reusable UI components
+- layouts -> Shared page layouts
+- pages -> Application pages
+- types -> TypeScript models
+
+## Running the Project
+
+Install dependencies:
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+Start development server:
+```bash
+npm run dev
 ```
+
+## Background
+This project is based on previous experience developing frontend applications for industrial systems, including HMI
+and pages presenting archival data.
+
+The original systems were built using Vue.js in both Options and Composition APIs. The integration with backend services
+was achieved through REST API communication utilizing endpoints.
+
+This project recreates similar concepts using React and
+TypeScript.
