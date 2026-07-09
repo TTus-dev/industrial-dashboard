@@ -1,6 +1,6 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { getMachine } from "../services/machineService";
-import type { Machine } from "../types/machine";
+import type {Machine, MachineStatus} from "../types/machine";
 import type { DowntimeEvent } from "../types/event";
 
 const OK_PROBABILITY = 0.8;
@@ -11,7 +11,7 @@ export const useMachineTelemetry = () => {
     const [machine, setMachine] = useState<Machine>(() => getMachine());
     const [downtimeEvents, setDowntimeEvents] = useState<DowntimeEvent[]>([]);
 
-    const previousStatus = useRef(machine.status);
+    const previousStatus = useRef<MachineStatus>(machine.status);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -44,7 +44,7 @@ export const useMachineTelemetry = () => {
                     ]);
                 }
 
-                if (
+                else if (
                     previousStatus.current === "stopped" &&
                     nextStatus === "running"
                 ) {
@@ -66,13 +66,20 @@ export const useMachineTelemetry = () => {
                 }
 
                 previousStatus.current = nextStatus;
+                
+                const newTemperature = Math.min(
+                    Math.max(previous.temperature + (Math.random() - 0.5) * 2, 0), 100
+                )
 
                 return {
                     ...previous,
-                    temperature: Math.min(
-                        Math.max(previous.temperature + (Math.random() - 0.5) * 2, 0),
-                        100
-                    ),
+                    temperature: newTemperature,
+                    temperatureHistory: [
+                        ...previous.temperatureHistory,
+                        {
+                            time: new Date(),
+                            value: newTemperature
+                        }].slice(-100),
                     okCount:
                         nextStatus === "running" && isOk
                             ? previous.okCount + 1

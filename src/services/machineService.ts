@@ -10,6 +10,10 @@ export const getMachine = (): Machine => {
         nokCount: 150,
         targetCount: 10000,
         startedAt: new Date(Date.now() - 1000 * 60 * 45),
-        idealCycleTime: Math.floor(Math.random() * (3000 - 1500) + 1500)
+        idealCycleTimeMs: Math.floor(Math.random() * (3000 - 1500) + 1500),
+        temperatureHistory: [{
+            time: new Date(),
+            value: 72
+        }]
     }
 }

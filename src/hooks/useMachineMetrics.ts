@@ -34,7 +34,7 @@ export const useMachineMetrics = (
     
     const performance =
         operatingTime > 0
-            ? (machine.idealCycleTime * totalCount) / operatingTime
+            ? (machine.idealCycleTimeMs * totalCount) / operatingTime
             : 0;
 
     return {

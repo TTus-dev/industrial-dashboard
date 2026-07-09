@@ -1,5 +1,11 @@
 ﻿export type MachineStatus = "running" | "stopped";
 
+
+export interface TemperaturePoint {
+    time: Date;
+    value: number;
+}
+
 export interface Machine {
     id: number;
     name: string;
@@ -9,5 +15,6 @@ export interface Machine {
     nokCount: number;
     targetCount: number;
     startedAt: Date;
-    idealCycleTime: number;
+    idealCycleTimeMs: number;
+    temperatureHistory: TemperaturePoint[];
 }
