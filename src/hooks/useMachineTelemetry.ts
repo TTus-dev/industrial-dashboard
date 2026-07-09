@@ -1,17 +1,17 @@
-﻿import { useEffect, useRef, useState } from "react";
+﻿import {useEffect, useRef, useState} from "react";
 import { getMachine } from "../services/machineService";
-import type {Machine, MachineStatus} from "../types/machine";
-import type { DowntimeEvent } from "../types/event";
+import type { Machine } from "../types/machine";
+import type { DowntimeEvent, DowntimeReason } from "../types/event";
 
 const OK_PROBABILITY = 0.8;
-const FAILURE_CHANCE = 0.001;
+const FAILURE_CHANCE = 0.02;
 const RECOVERY_CHANCE = 0.3;
 
 export const useMachineTelemetry = () => {
     const [machine, setMachine] = useState<Machine>(() => getMachine());
     const [downtimeEvents, setDowntimeEvents] = useState<DowntimeEvent[]>([]);
-
-    const previousStatus = useRef<MachineStatus>(machine.status);
+    const [activeDowntime, setActiveDowntime] = useState<DowntimeEvent | null>(null);
+    const activeDowntimeFlag = useRef(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -21,7 +21,7 @@ export const useMachineTelemetry = () => {
             setMachine(previous => {
                 const nextStatus =
                     previous.status === "stopped"
-                        ? Math.random() < RECOVERY_CHANCE
+                        ? Math.random() < RECOVERY_CHANCE && !activeDowntimeFlag.current
                             ? "running"
                             : "stopped"
                         : shouldFail
@@ -29,23 +29,30 @@ export const useMachineTelemetry = () => {
                             : "running";
 
                 if (
-                    previousStatus.current === "running" &&
+                    previous.status === "running" &&
                     nextStatus === "stopped"
                 ) {
-                    setDowntimeEvents(events => [
-                        ...events,
-                        {
+                    setDowntimeEvents(events => {
+                        const event: DowntimeEvent = {
                             id: events.length > 0
                                 ? events[events.length - 1].id + 1
                                 : 1,
                             machineId: previous.id,
                             startTime: new Date(),
-                        },
-                    ]);
+                        };
+
+                        setActiveDowntime(event);
+                        activeDowntimeFlag.current = true
+
+                        return [
+                            ...events,
+                            event,
+                        ];
+                    });
                 }
 
                 else if (
-                    previousStatus.current === "stopped" &&
+                    previous.status === "stopped" &&
                     nextStatus === "running"
                 ) {
                     setDowntimeEvents(events => {
@@ -64,8 +71,6 @@ export const useMachineTelemetry = () => {
                         ];
                     });
                 }
-
-                previousStatus.current = nextStatus;
                 
                 const newTemperature = Math.min(
                     Math.max(previous.temperature + (Math.random() - 0.5) * 2, 0), 100
@@ -96,8 +101,33 @@ export const useMachineTelemetry = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const reportDowntime = (
+        reason: DowntimeReason,
+        comment: string
+    ) => {
+        if (!activeDowntime) return;
+
+        setDowntimeEvents(events =>
+            events.map(event =>
+                event.id === activeDowntime.id
+                    ? {
+                        ...event,
+                        reason,
+                        comment,
+                        reportTime: new Date(),
+                    }
+                    : event
+            )
+        );
+
+        setActiveDowntime(null);
+        activeDowntimeFlag.current = false;
+    };
+
     return {
         machine,
         downtimeEvents,
+        activeDowntime,
+        reportDowntime,
     };
 };

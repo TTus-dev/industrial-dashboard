@@ -10,6 +10,7 @@ export interface DowntimeEvent {
     machineId: number;
     startTime: Date;
     endTime?: Date;
+    reportTime?: Date;
     reason?: DowntimeReason;
     comment?: string;
 }
