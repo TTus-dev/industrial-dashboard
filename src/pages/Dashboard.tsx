@@ -1,12 +1,12 @@
 ﻿import { Box } from "@mui/material";
 import { MachineStatusDisplay } from "../components/machine/MachineStatusDisplay";
-import { useMachineTelemetry } from "../hooks/useMachineTelemetry";
 import { MachineOee } from "../components/machine/MachineOee.tsx";
 import { useMachineMetrics } from "../hooks/useMachineMetrics.ts";
 import {TemperatureSection} from "../components/machine/TemperatureCard.tsx";
+import {useTelemetry} from "../context/TelemetryContext.tsx";
 
 const Dashboard = () => {
-    const {machine, downtimeEvents} = useMachineTelemetry();
+    const { machine, downtimeEvents } = useTelemetry();
     
     const metrics = useMachineMetrics(machine, downtimeEvents);
     
