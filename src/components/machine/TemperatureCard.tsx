@@ -1,6 +1,6 @@
 ﻿import { Line } from "react-chartjs-2"
 import { Box, Paper, Typography } from "@mui/material";
-import { formatTime24 } from "../../utils/DateFormatter";
+import { formatTime24WithSeconds } from "../../utils/DateFormatter";
 import type { TemperaturePoint } from "../../types/machine";
 
 interface TemperatureSectionProps {
@@ -9,7 +9,7 @@ interface TemperatureSectionProps {
 
 export const TemperatureSection = ({ history }: TemperatureSectionProps) => {
     const data = {
-        labels: history.map(point => formatTime24(point.time)),
+        labels: history.map(point => formatTime24WithSeconds(point.time)),
         datasets: [
             {
                 label: "Temperature",
@@ -22,6 +22,7 @@ export const TemperatureSection = ({ history }: TemperatureSectionProps) => {
 
     const options = {
         maintainAspectRatio: false,
+        animation: false as const,
         plugins: {
             legend: {
                 display: false,

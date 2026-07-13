@@ -12,6 +12,7 @@ export const useMachineTelemetry = () => {
     const [downtimeEvents, setDowntimeEvents] = useState<DowntimeEvent[]>([]);
     const [activeDowntime, setActiveDowntime] = useState<DowntimeEvent | null>(null);
     const activeDowntimeFlag = useRef(false);
+    const nextDowntimeId = useRef(1);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -30,46 +31,39 @@ export const useMachineTelemetry = () => {
 
                 if (
                     previous.status === "running" &&
-                    nextStatus === "stopped"
+                    nextStatus === "stopped" &&
+                    !activeDowntimeFlag.current
                 ) {
-                    setDowntimeEvents(events => {
-                        const event: DowntimeEvent = {
-                            id: events.length > 0
-                                ? events[events.length - 1].id + 1
-                                : 1,
-                            machineId: previous.id,
-                            startTime: new Date(),
-                        };
+                    const event: DowntimeEvent = {
+                        id: nextDowntimeId.current++,
+                        machineId: previous.id,
+                        startTime: new Date(),
+                        reason: "unknown"
+                    };
 
-                        setActiveDowntime(event);
-                        activeDowntimeFlag.current = true
+                    setActiveDowntime(event);
+                    activeDowntimeFlag.current = true;
 
-                        return [
-                            ...events,
-                            event,
-                        ];
-                    });
+                    setDowntimeEvents(events => [
+                        ...events,
+                        event,
+                    ]);
                 }
 
                 else if (
                     previous.status === "stopped" &&
                     nextStatus === "running"
                 ) {
-                    setDowntimeEvents(events => {
-                        const lastEvent = events[events.length - 1];
-
-                        if (!lastEvent || lastEvent.endTime) {
-                            return events;
-                        }
-
-                        return [
-                            ...events.slice(0, -1),
-                            {
-                                ...lastEvent,
-                                endTime: new Date(),
-                            },
-                        ];
-                    });
+                    setDowntimeEvents(events =>
+                        events.map(event =>
+                            event.id === activeDowntime?.id
+                                ? {
+                                    ...event,
+                                    endTime: new Date(),
+                                }
+                                : event
+                        )
+                    );
                 }
                 
                 const newTemperature = Math.min(

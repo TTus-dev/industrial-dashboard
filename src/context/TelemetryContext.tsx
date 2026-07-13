@@ -1,5 +1,6 @@
 ﻿import { createContext, useContext } from "react";
 import { useMachineTelemetry } from "../hooks/useMachineTelemetry";
+import * as React from "react";
 
 const TelemetryContext = createContext<ReturnType<typeof useMachineTelemetry> | null>(null);
 
