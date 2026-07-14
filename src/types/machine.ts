@@ -1,4 +1,6 @@
-﻿export type MachineStatus = "running" | "stopped";
+﻿import type { DowntimeEvent } from "./event.ts";
+
+export type MachineStatus = "running" | "stopped";
 
 
 export interface TemperaturePoint {
@@ -16,5 +18,10 @@ export interface Machine {
     targetCount: number;
     startedAt: Date;
     idealCycleTimeMs: number;
+}
+
+export interface MachineHistory {
+    id: number;
     temperatureHistory: TemperaturePoint[];
+    downtimeEvents: DowntimeEvent[];
 }

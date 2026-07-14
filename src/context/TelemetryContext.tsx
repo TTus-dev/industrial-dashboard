@@ -1,11 +1,11 @@
 ﻿import { createContext, useContext } from "react";
-import { useMachineTelemetry } from "../hooks/useMachineTelemetry";
+import { useMachineSimulation } from "../hooks/useMachineSimulation";
 import * as React from "react";
 
-const TelemetryContext = createContext<ReturnType<typeof useMachineTelemetry> | null>(null);
+const TelemetryContext = createContext<ReturnType<typeof useMachineSimulation> | null>(null);
 
 export const TelemetryProvider = ({ children }: { children: React.ReactNode }) => {
-    const telemetry = useMachineTelemetry();
+    const telemetry = useMachineSimulation();
 
     return (
         <TelemetryContext.Provider value={telemetry}>

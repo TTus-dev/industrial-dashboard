@@ -8,11 +8,11 @@ const Report = () => {
     const [from, setFrom] = useState<Date>(new Date(Date.now() - 60 * 60 * 1000));
     const [to, setTo] = useState<Date>(new Date());
     
-    const { machine, downtimeEvents } = useTelemetry()
+    const { machine, history } = useTelemetry()
 
     const [reportData, setReportData] = useState(() => ({
         machine: structuredClone(machine),
-        downtimeEvents: structuredClone(downtimeEvents),
+        downtimeEvents: structuredClone(history.downtimeEvents),
         reportTime: new Date()
     }));
     
@@ -36,7 +36,7 @@ const Report = () => {
 
                     setReportData({
                         machine: structuredClone(machine),
-                        downtimeEvents: structuredClone(downtimeEvents),
+                        downtimeEvents: structuredClone(history.downtimeEvents),
                         reportTime: new Date()
                     });
 

@@ -8,9 +8,9 @@ import { DowntimeDialog } from "../dialogs/DowntimeDialog.tsx";
 import type { DowntimeReason } from "../types/event.ts";
 
 const Dashboard = () => {
-    const { machine, downtimeEvents, activeDowntime, reportDowntime } = useTelemetry();
+    const { machine, history, activeDowntime, reportDowntime } = useTelemetry();
     
-    const metrics = useMachineMetrics(machine, downtimeEvents);
+    const metrics = useMachineMetrics(machine, history.downtimeEvents);
 
     const handleDowntimeReport = (
         reason: DowntimeReason,
@@ -31,7 +31,7 @@ const Dashboard = () => {
                 </Box>
             </Box>
             <Box sx={{ flex: 1 }}>
-                <TemperatureSection history={machine.temperatureHistory} />
+                <TemperatureSection history={history.temperatureHistory} />
             </Box>
         </Box>
     );

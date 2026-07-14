@@ -1,15 +1,16 @@
 ﻿import {useEffect, useRef, useState} from "react";
-import { getMachine } from "../services/machineService";
-import type { Machine } from "../types/machine";
+import {getMachine, getMachineHistory} from "../services/machineService";
+import type {Machine, MachineHistory} from "../types/machine";
 import type { DowntimeEvent, DowntimeReason } from "../types/event";
 
 const OK_PROBABILITY = 0.8;
 const FAILURE_CHANCE = 0.02;
 const RECOVERY_CHANCE = 0.3;
 
-export const useMachineTelemetry = () => {
+export const useMachineSimulation = () => {
     const [machine, setMachine] = useState<Machine>(() => getMachine());
-    const [downtimeEvents, setDowntimeEvents] = useState<DowntimeEvent[]>([]);
+    const [history, setHistory] = useState<MachineHistory>(() => getMachineHistory());
+    
     const [activeDowntime, setActiveDowntime] = useState<DowntimeEvent | null>(null);
     const activeDowntimeFlag = useRef(false);
     const nextDowntimeId = useRef(1);
@@ -44,41 +45,46 @@ export const useMachineTelemetry = () => {
                     setActiveDowntime(event);
                     activeDowntimeFlag.current = true;
 
-                    setDowntimeEvents(events => [
-                        ...events,
-                        event,
-                    ]);
+                    setHistory(previous => ({
+                        ...previous,
+                        downtimeEvents: [...previous.downtimeEvents, event]
+                    }))
                 }
 
                 else if (
                     previous.status === "stopped" &&
                     nextStatus === "running"
                 ) {
-                    setDowntimeEvents(events =>
-                        events.map(event =>
+                    setHistory(previous => ({
+                        ...previous,
+                        downtimeEvents: previous.downtimeEvents.map(event => 
                             event.id === activeDowntime?.id
-                                ? {
-                                    ...event,
-                                    endTime: new Date(),
-                                }
-                                : event
+                            ? {
+                            ...event,
+                                endTime: new Date()
+                            } : event
                         )
-                    );
+                    }))
                 }
                 
                 const newTemperature = Math.min(
                     Math.max(previous.temperature + (Math.random() - 0.5) * 2, 0), 100
                 )
-
-                return {
+                
+                setHistory(previous => ({
                     ...previous,
-                    temperature: newTemperature,
                     temperatureHistory: [
                         ...previous.temperatureHistory,
                         {
                             time: new Date(),
                             value: newTemperature
-                        }].slice(-100),
+                        }
+                    ].slice(-100)
+                }))
+
+                return {
+                    ...previous,
+                    temperature: newTemperature,
                     okCount:
                         nextStatus === "running" && isOk
                             ? previous.okCount + 1
@@ -101,8 +107,9 @@ export const useMachineTelemetry = () => {
     ) => {
         if (!activeDowntime) return;
 
-        setDowntimeEvents(events =>
-            events.map(event =>
+        setHistory(previous => ({
+            ...previous,
+            downtimeEvents: previous.downtimeEvents.map(event =>
                 event.id === activeDowntime.id
                     ? {
                         ...event,
@@ -112,7 +119,7 @@ export const useMachineTelemetry = () => {
                     }
                     : event
             )
-        );
+        }))
 
         setActiveDowntime(null);
         activeDowntimeFlag.current = false;
@@ -120,7 +127,7 @@ export const useMachineTelemetry = () => {
 
     return {
         machine,
-        downtimeEvents,
+        history,
         activeDowntime,
         reportDowntime,
     };
