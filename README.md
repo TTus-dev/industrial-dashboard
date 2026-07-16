@@ -43,14 +43,23 @@ The data layer is structured to resemble communication with an external system, 
 ## Project structure
 
 src/
+
 ├── app          # Router, theme, navigation
+
 ├── components   # Reusable UI components
+
 ├── context      # Application state
+
 ├── dialogs
+
 ├── hooks
+
 ├── layouts
+
 ├── pages
+
 ├── types
+
 └── utils
 
 ## Running the Project
