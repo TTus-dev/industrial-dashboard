@@ -1,12 +1,10 @@
-# Industrial dashboard
+# Industrial Dashboard
 
-A React + TypeScript dashboard application inspired by industrial machine monitoring systems.
+A React + TypeScript dashboard inspired by industrial machine monitoring systems.
 
-This project recreates a simplified version of an industrial HMI/monitoring application,
-focusing on modern React architecture, TypeScript usage, Material UI components and data visualization.
+This project recreates a simplified industrial HMI/monitoring application, focusing on modern React architecture, TypeScript, Material UI, and interactive data visualization.
 
-The goal of this project is to apply existing frontend experience in React applications as well as find out how well 
-previous commercial experience in Vue translates to different ecosystem.
+The primary goal was to apply existing frontend experience with React while exploring how previous commercial experience with Vue.js translates to a different ecosystem.
 
 
 ## Tech Stack
@@ -16,10 +14,9 @@ previous commercial experience in Vue translates to different ecosystem.
 - Vite
 - Material UI
 - React Router
-- Chart.js / D3.js
+- Chart.js (react-chartjs-2)
 
-
-## Planned Features
+## Features
 
 ### Machine Dashboard
 
@@ -39,22 +36,22 @@ previous commercial experience in Vue translates to different ecosystem.
 
 ## Data Source
 
-Currently, the application uses simulated frontend data instead of a backend service.
+Currently the application currently uses simulated telemetry instead of a backend service.
 
-The data layer is designed to imitate communication with external system, similar to how industrial applications consume
-REST APIs or real-time data sources.
-
+The data layer is structured to resemble communication with an external system, similar to industrial applications consuming REST APIs or real-time telemetry sources.
 
 ## Project structure
 
-The application follows a component-based React architecture:
-
 src/
-- app → Application configuration (router, theme, navigation)
-- components -> Reusable UI components
-- layouts -> Shared page layouts
-- pages -> Application pages
-- types -> TypeScript models
+├── app          # Router, theme, navigation
+├── components   # Reusable UI components
+├── context      # Application state
+├── dialogs
+├── hooks
+├── layouts
+├── pages
+├── types
+└── utils
 
 ## Running the Project
 
@@ -70,11 +67,18 @@ npm run dev
 ```
 
 ## Background
-This project is based on previous experience developing frontend applications for industrial systems, including HMI
-and pages presenting archival data.
+This project is inspired by previous commercial experience developing frontend applications for industrial systems, including HMIs and historical reporting tools.
 
-The original systems were built using Vue.js in both Options and Composition APIs. The integration with backend services
-was achieved through REST API communication utilizing endpoints.
+Those systems were built with Vue.js (Options API and Composition API) and integrated with backend services through REST APIs.
 
-This project recreates similar concepts using React and
-TypeScript.
+This project recreates similar concepts using React and TypeScript while following modern React development practices.
+
+## What I Practiced
+
+- Component-driven architecture
+- React Context for application state
+- Custom hooks
+- TypeScript modeling
+- Responsive layouts with Material UI
+- Data visualization with Chart.js (react-chartjs-2)
+- Theme management (light/dark mode)
