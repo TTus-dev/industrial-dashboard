@@ -4,6 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import "dayjs/locale/pl";
+import { normalizeMinute } from "../../utils/DateFormatter";
 
 interface DateFiltersProps {
     from: Date;
@@ -24,7 +25,7 @@ export const DateFilters = ({from, to, onApply}: DateFiltersProps) => {
                     value={from ? dayjs(from) : null}
                     onChange={(value) => {
                         if (value) {
-                            onApply(value.toDate(), to);
+                            onApply(normalizeMinute(value.toDate()), to);
                         }
                     }}
                 />
@@ -38,7 +39,7 @@ export const DateFilters = ({from, to, onApply}: DateFiltersProps) => {
                     value={to ? dayjs(to) : null}
                     onChange={(value) => {
                         if (value) {
-                            onApply(from, value.toDate());
+                            onApply(from, normalizeMinute(value.toDate()));
                         }
                     }}
                 />

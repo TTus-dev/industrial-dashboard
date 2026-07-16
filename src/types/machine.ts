@@ -1,4 +1,4 @@
-﻿import type { DowntimeEvent } from "./event.ts";
+﻿import type { DowntimeEvent } from "./event";
 
 export type MachineStatus = "running" | "stopped";
 

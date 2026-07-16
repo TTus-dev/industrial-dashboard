@@ -7,7 +7,7 @@
 
 export interface DowntimeEvent {
     id: number;
-    machineId: number;
+    temperature: number;
     startTime: Date;
     endTime?: Date;
     reportTime?: Date;

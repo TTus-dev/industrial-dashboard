@@ -1,5 +1,5 @@
-﻿import {useEffect, useRef, useState} from "react";
-import {getMachine, getMachineHistory} from "../services/machineService";
+﻿import { useEffect, useRef, useState } from "react";
+import { getMachine, getMachineHistory } from "../services/machineService";
 import type {Machine, MachineHistory} from "../types/machine";
 import type { DowntimeEvent, DowntimeReason } from "../types/event";
 
@@ -12,7 +12,8 @@ export const useMachineSimulation = () => {
     const [history, setHistory] = useState<MachineHistory>(() => getMachineHistory());
     
     const [activeDowntime, setActiveDowntime] = useState<DowntimeEvent | null>(null);
-    const activeDowntimeFlag = useRef(false);
+    const activeDowntimeRef = useRef<DowntimeEvent | null>(null);
+    const reportedDowntimeRef = useRef(true);
     const nextDowntimeId = useRef(1);
 
     useEffect(() => {
@@ -23,7 +24,7 @@ export const useMachineSimulation = () => {
             setMachine(previous => {
                 const nextStatus =
                     previous.status === "stopped"
-                        ? Math.random() < RECOVERY_CHANCE && !activeDowntimeFlag.current
+                        ? Math.random() < RECOVERY_CHANCE && reportedDowntimeRef.current
                             ? "running"
                             : "stopped"
                         : shouldFail
@@ -33,17 +34,18 @@ export const useMachineSimulation = () => {
                 if (
                     previous.status === "running" &&
                     nextStatus === "stopped" &&
-                    !activeDowntimeFlag.current
+                    !activeDowntimeRef.current
                 ) {
                     const event: DowntimeEvent = {
                         id: nextDowntimeId.current++,
-                        machineId: previous.id,
                         startTime: new Date(),
-                        reason: "unknown"
+                        reason: "unknown",
+                        temperature: previous.temperature,
                     };
 
+                    activeDowntimeRef.current = event;
+                    reportedDowntimeRef.current = false;
                     setActiveDowntime(event);
-                    activeDowntimeFlag.current = true;
 
                     setHistory(previous => ({
                         ...previous,
@@ -58,13 +60,15 @@ export const useMachineSimulation = () => {
                     setHistory(previous => ({
                         ...previous,
                         downtimeEvents: previous.downtimeEvents.map(event => 
-                            event.id === activeDowntime?.id
+                            event.id === activeDowntimeRef.current?.id
                             ? {
                             ...event,
                                 endTime: new Date()
                             } : event
                         )
                     }))
+                    
+                    activeDowntimeRef.current = null
                 }
                 
                 const newTemperature = Math.min(
@@ -79,7 +83,7 @@ export const useMachineSimulation = () => {
                             time: new Date(),
                             value: newTemperature
                         }
-                    ].slice(-100)
+                    ]
                 }))
 
                 return {
@@ -105,12 +109,12 @@ export const useMachineSimulation = () => {
         reason: DowntimeReason,
         comment: string
     ) => {
-        if (!activeDowntime) return;
+        if (!activeDowntimeRef.current) return;
 
         setHistory(previous => ({
             ...previous,
             downtimeEvents: previous.downtimeEvents.map(event =>
-                event.id === activeDowntime.id
+                event.id === activeDowntimeRef.current?.id
                     ? {
                         ...event,
                         reason,
@@ -121,8 +125,8 @@ export const useMachineSimulation = () => {
             )
         }))
 
+        reportedDowntimeRef.current = true;
         setActiveDowntime(null);
-        activeDowntimeFlag.current = false;
     };
 
     return {

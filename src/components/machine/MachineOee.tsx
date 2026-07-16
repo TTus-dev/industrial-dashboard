@@ -1,14 +1,15 @@
-﻿import { Box, Paper } from "@mui/material";
+﻿import { Box, Paper, useTheme } from "@mui/material";
 import type { MachineMetrics } from "../../types/metrics";
 import { Doughnut } from "react-chartjs-2";
 import { useMemo } from "react";
-import { theme } from "../../app/theme";
 
 interface MachineOeeProps {
     metrics: MachineMetrics;
 }
 
 export const MachineOee = ({metrics} : MachineOeeProps) => {
+    const theme = useTheme();
+    
     const doughnutOptions = {
         events: [],
         plugins: {
@@ -36,15 +37,32 @@ export const MachineOee = ({metrics} : MachineOeeProps) => {
     }), [metrics.oee]);
     
     return (
-        <Paper sx={{ display: "flex", flexDirection: "row", gap: "5rem", alignItems: "center", justifyContent: "space-evenly" }}>
+        <Paper sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "2rem",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            minWidth: 0,
+            minHeight: 0,
+            overflow: "hidden",
+        }}>
             <Box
                 sx={{
                     position: "relative",
-                    width: "min-content",
-                    height: "100%",
+                    width: "clamp(150px, 15vw, 250px)",
+                    aspectRatio: "1 / 1",
+                    flexShrink: 0,
                 }}
             >
-                <Doughnut data={doughnutData} options={doughnutOptions} />
+                <Doughnut
+                    data={doughnutData}
+                    options={{
+                        ...doughnutOptions,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    }}
+                />
 
                 <Box
                     sx={{

@@ -7,6 +7,7 @@
     ArcElement,
     Tooltip,
     Legend,
+    BarElement,
 } from "chart.js";
 
 ChartJS.register(
@@ -16,5 +17,6 @@ ChartJS.register(
     LineElement,
     ArcElement,
     Tooltip,
-    Legend
+    Legend,
+    BarElement,
 );

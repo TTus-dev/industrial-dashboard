@@ -1,6 +1,6 @@
 ﻿import { Box, capitalize, Paper, Typography } from "@mui/material";
 import { Circle } from "@mui/icons-material";
-import type { Machine, MachineStatus } from "../../types/machine.ts";
+import type { Machine, MachineStatus } from "../../types/machine";
 
 interface MachineStatusProps {
     machine: Machine;
@@ -20,7 +20,7 @@ const getStatusColor = (status: MachineStatus) => {
 export const MachineStatusDisplay = ({machine} : MachineStatusProps) => {
     return (
         <Paper sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", p: "2rem", height: "100%"}}>
-            <Typography variant="h3">
+            <Typography variant="h3" noWrap sx={{ overflow: "hidden", textOverflow: "ellipsis"}}>
                 {machine.name}
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", fontSize: "1.5rem", mt: "0.5rem", gap: "1rem" }}>

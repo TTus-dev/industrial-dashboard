@@ -7,7 +7,7 @@
     });
 
 export const formatDuration = (milliseconds: number) => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
+    const totalSeconds = Math.round(milliseconds / 1000);
 
     const days = Math.floor(totalSeconds / 86400);
     const hours = Math.floor((totalSeconds % 86400) / 3600);
@@ -24,4 +24,10 @@ export const formatDuration = (milliseconds: number) => {
     }
 
     return parts.length > 0 ? parts.join(" ") : "0m";
+};
+
+export const normalizeMinute = (date: Date) => {
+    const result = new Date(date);
+    result.setSeconds(0, 0);
+    return result;
 };
